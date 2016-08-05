@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="homedevModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="game">
+          <Key>
+            <PropertyRef Name="nome" />
+          </Key>
+          <Property Name="nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="10" />
+          <Property Name="descricao" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="user_game">
+          <Key>
+            <PropertyRef Name="email" />
+            <PropertyRef Name="nome" />
+          </Key>
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="classificacao" Type="int" />
+          <Property Name="horas" Type="int" />
+        </EntityType>
+        <EntityType Name="useraccount">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="20" />
+          <Property Name="sexo" Type="char" MaxLength="1" />
+          <Property Name="password" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="user_game_ibfk_1">
+          <End Role="useraccount" Type="Self.useraccount" Multiplicity="1" />
+          <End Role="user_game" Type="Self.user_game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="useraccount">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="user_game">
+              <PropertyRef Name="email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_game_ibfk_2">
+          <End Role="game" Type="Self.game" Multiplicity="1" />
+          <End Role="user_game" Type="Self.user_game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="nome" />
+            </Principal>
+            <Dependent Role="user_game">
+              <PropertyRef Name="nome" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="homedevModelStoreContainer">
+          <EntitySet Name="game" EntityType="Self.game" Schema="homedev" store:Type="Tables" />
+          <EntitySet Name="user_game" EntityType="Self.user_game" Schema="homedev" store:Type="Tables" />
+          <EntitySet Name="useraccount" EntityType="Self.useraccount" Schema="homedev" store:Type="Tables" />
+          <AssociationSet Name="user_game_ibfk_1" Association="Self.user_game_ibfk_1">
+            <End Role="useraccount" EntitySet="useraccount" />
+            <End Role="user_game" EntitySet="user_game" />
+          </AssociationSet>
+          <AssociationSet Name="user_game_ibfk_2" Association="Self.user_game_ibfk_2">
+            <End Role="game" EntitySet="game" />
+            <End Role="user_game" EntitySet="user_game" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="homedevModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="game">
+          <Key>
+            <PropertyRef Name="nome" />
+          </Key>
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user_game" Relationship="Self.user_game_ibfk_2" FromRole="game" ToRole="user_game" />
+        </EntityType>
+        <EntityType Name="user_game">
+          <Key>
+            <PropertyRef Name="email" />
+            <PropertyRef Name="nome" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="classificacao" Type="Int32" />
+          <Property Name="horas" Type="Int32" />
+          <NavigationProperty Name="game" Relationship="Self.user_game_ibfk_2" FromRole="user_game" ToRole="game" />
+          <NavigationProperty Name="useraccount" Relationship="Self.user_game_ibfk_1" FromRole="user_game" ToRole="useraccount" />
+        </EntityType>
+        <EntityType Name="useraccount">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nome" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="sexo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="user_game" Relationship="Self.user_game_ibfk_1" FromRole="useraccount" ToRole="user_game" />
+        </EntityType>
+        <Association Name="user_game_ibfk_2">
+          <End Role="game" Type="Self.game" Multiplicity="1" />
+          <End Role="user_game" Type="Self.user_game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="game">
+              <PropertyRef Name="nome" />
+            </Principal>
+            <Dependent Role="user_game">
+              <PropertyRef Name="nome" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_game_ibfk_1">
+          <End Role="useraccount" Type="Self.useraccount" Multiplicity="1" />
+          <End Role="user_game" Type="Self.user_game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="useraccount">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="user_game">
+              <PropertyRef Name="email" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="homedevEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="game" EntityType="Self.game" />
+          <EntitySet Name="user_game" EntityType="Self.user_game" />
+          <EntitySet Name="useraccount" EntityType="Self.useraccount" />
+          <AssociationSet Name="user_game_ibfk_2" Association="Self.user_game_ibfk_2">
+            <End Role="game" EntitySet="game" />
+            <End Role="user_game" EntitySet="user_game" />
+          </AssociationSet>
+          <AssociationSet Name="user_game_ibfk_1" Association="Self.user_game_ibfk_1">
+            <End Role="useraccount" EntitySet="useraccount" />
+            <End Role="user_game" EntitySet="user_game" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="homedevModelStoreContainer" CdmEntityContainer="homedevEntities">
+          <EntitySetMapping Name="game">
+            <EntityTypeMapping TypeName="homedevModel.game">
+              <MappingFragment StoreEntitySet="game">
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_game">
+            <EntityTypeMapping TypeName="homedevModel.user_game">
+              <MappingFragment StoreEntitySet="user_game">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="classificacao" ColumnName="classificacao" />
+                <ScalarProperty Name="horas" ColumnName="horas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="useraccount">
+            <EntityTypeMapping TypeName="homedevModel.useraccount">
+              <MappingFragment StoreEntitySet="useraccount">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="sexo" ColumnName="sexo" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
